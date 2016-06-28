@@ -25,38 +25,42 @@ class ExtendableError extends Error {
 
 class TypeError extends ExtendableError {
   constructor(loc, m) {
-    super(m);
+    super(loc.start + ": " + m);
     this.location = loc;
   }
 }
 
 function typecheck (asa) {
 
+  let id_compare = (a, b) => a.string === b.string
+
   let defs = asa.map
-    ((decl) => decl.id.string)
+    ((decl) => decl.id)
+
   let uses = asa.map
     ((decl) => decl.edges.map
-      ((e) => [e.source.string, e.target.string]))
+      ((e) => [e.source, e.target]))
     .reduce(concat)
   .reduce(concat)
-  .dedup()
+  .dedup(id_compare)
+
   let init = asa.filter
     ((decl) => decl.type === "initial")
 
   // 1. No duplicate definitions
-  if (defs.dedup().length !== defs.length)
+  if (defs.dedup(id_compare).length !== defs.length)
     throw new TypeError({}, "Duplicate state definitions found.");
 
   // Note: this means defs.dedup() should be idempotent,
   // so we good with just using defs below
 
   // 2. No undeclared states
-  if (!uses.subsetOf(defs))
+  if (!uses.subsetOf(defs, id_compare))
     throw new TypeError({}, "Use of undeclared state found.")
 
   // 3. Exactly 1 initial state
-  if (init.length > 2)
-    throw new TypeError({}, "More than 1 initial state found.")
+  if (init.length > 1)
+    throw new TypeError(init[1].id.location, "More than 1 initial state found.")
 
   return asa;
 }

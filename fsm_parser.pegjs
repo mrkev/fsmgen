@@ -16,15 +16,35 @@
  */
 
 {
-  function Identifier (location, string) {
+  function Identifier (loc, string) {
     this.string = string;
-    this.location = location
+    this.location = new Location(loc)
   }
 
-  function Symbol (location, string) {
+  function Symbol (loc, string) {
     this.string = string;
-    this.location = location
+    this.location = new Location(loc)
   }
+
+  function Coordinate (coord) {
+    this.offset = coord.offset;
+    this.line = coord.line;
+    this.column = coord.column;
+  }
+
+  Coordinate.prototype.toString = function () {
+    return this.line + ":" + this.column;
+  }
+
+  function Location (loc) {
+    this.start = new Coordinate(loc.start);
+    this.end   = new Coordinate(loc.end);
+  }
+
+  Location.prototype.toString = function () {
+    return "[" + this.start + " -> " + this.end + "]";
+  };
+
 }
 
 defns

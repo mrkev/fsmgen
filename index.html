@@ -63,11 +63,21 @@
   };
 
   let concat = (a, b) => a.concat(b);
-  Array.prototype.dedup = function () {
-    return this.filter((x, i) => this.indexOf(x) === i);
+  Array.prototype.dedup = function (comp) {
+    return this.filter((x, i) => this.find(x, comp) === i)
   }
-  Array.prototype.subsetOf = function(arr) {
-    return this.filter((x) => arr.indexOf(x) < 0).length === 0;
+
+  /** Replacement for indexOf, with optional custom comparator */
+  Array.prototype.find = function (o, comp) {
+    comp = comp || ((x, y) => x === y);
+    for (var i = 0; i < this.length; i++) {
+        if (comp(o, this[i])) return i;
+    }
+    return -1;
+  };
+
+  Array.prototype.subsetOf = function(arr, comp) {
+    return this.filter((x) => arr.find(x, comp) < 0).length === 0;
   };
   Array.prototype.each = function(cb) {
     this.forEach(cb); return this;
