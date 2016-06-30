@@ -27,7 +27,7 @@
 
 <header>
   <h1>Fsmgen</h1>
-  <p>This site lets you desing FSMs using a DSL. Here's how to use it;</p>
+  <p>This site lets you design FSMs using a DSL. Here's how to use it;</p>
 
   <h3>Define a state:</h3>
 
@@ -47,7 +47,8 @@ state q1 =
         <pre>
 initial state q0 =
   | stay -> q0
-  | jump -> q1
+  | move -> q1
+  | jump -> q2
 
 state q1 =
   | back -> q0
@@ -55,7 +56,8 @@ state q1 =
   | move -> q2
 
 final state q2 =
-  | stay -> q2</pre>
+  | stay -> q2
+  | restart -> q0</pre>
 </header>
 
 <!--********************************* BODY. *********************************-->
