@@ -1,5 +1,5 @@
 "use strict";
-/* global console */
+/* global console, d3, PEG, alert, typecheck, Viz, concat */
 
 var parser = null;
 
@@ -31,29 +31,40 @@ d3.select("#parse_button").on('click', () => {
     else {
       console.log(err.message);
       console.trace(err);
+      alert(err);
     }
-  })
+  });
 
 });
 
 function generate_dot (nodes) {
-  let node_defs = nodes
-    .map(node => node.id.string +
-        ((node.type === "initial") ? " [peripheries=2]" : ""))
-    .join("\n");
 
-  let edge_defs = nodes
+  let init = nodes.filter
+    ((node) => node.type === "initial");
+
+  let node_defs = []
+  .concat(init
+    .map(node => "__start__" + node.id.string + " [style=invis]"))
+  .concat(nodes
+    .map(node => node.id.string + (
+        (node.type === "final") ? " [peripheries=2]" : "")))
+  .join("\n");
+
+  let edge_defs = []
+  .concat(init
+    .map((node) => "__start__" + node.id.string + " -> " + node.id.string))
+  .concat(nodes
     .map(node => node.edges)
     .reduce(concat, [])
     .map(edge => edge.source.string + " -> " + 
                  edge.target.string + 
-               ' [label="' + edge.symbol.string + '"]')
-    .join("\n");
+               ' [label="' + edge.symbol.string + '"]'))
+  .join("\n");
 
   return "digraph { \n" +
     node_defs + "\n" +
     edge_defs + "\n" +
-  "}"
+  "}";
 }
 
 function render_dot (engine, dot) {
