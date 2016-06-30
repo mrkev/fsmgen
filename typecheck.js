@@ -40,8 +40,8 @@ function typecheck (asa) {
   let uses = asa.map
     ((decl) => decl.edges.map
       ((e) => [e.source, e.target]))
-    .reduce(concat)
-  .reduce(concat)
+    .reduce(concat, [])
+  .reduce(concat, [])
   .dedup(id_compare)
 
   let init = asa.filter
