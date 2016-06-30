@@ -84,9 +84,16 @@
   Array.prototype.minus = function(arr, comp) {
     return this.filter((x) => arr.find(x, comp) < 0);
   };
+  Array.prototype.repeats = function(comp) {
+    return this.reduce((acc, x, i) =>
+      (this.slice(0, i).find(x, comp) > -1 ?
+        acc.concat(x) : acc), [])
+  }; // [1,2,1,2,2] -> [1,2,2]
+
   Array.prototype.each = function(cb) {
     this.forEach(cb); return this;
   };
+
 
 
   </script>

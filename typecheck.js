@@ -48,8 +48,9 @@ function typecheck (asa) {
     ((decl) => decl.type === "initial")
 
   // 1. No duplicate definitions
-  if (defs.dedup(id_compare).length !== defs.length)
-    throw new TypeError({}, "Duplicate state definitions found.");
+  let dupes = defs.repeats(id_compare);
+  if (dupes.length > 0)
+    throw new TypeError(dupes[0].location, "Duplicate state definition for " + dupes[0].string + " found.");
 
   // Note: this means defs.dedup() should be idempotent,
   // so we good with just using defs below
