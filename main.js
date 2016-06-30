@@ -43,7 +43,7 @@ function generate_dot (nodes) {
 
   let node_defs = []
   .concat(init
-    .map(node => "__start__" + node.id.string + " [style=invis]"))
+    .map(node => "__start__" + node.id.string + " [style=invis,fixedsize=true,height=0,width=0]"))
   .concat(nodes
     .map(node => node.id.string + (
         (node.type === "final") ? " [peripheries=2]" : "")))
