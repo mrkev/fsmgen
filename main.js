@@ -20,7 +20,6 @@ d3.select("#parse_button").on('click', () => {
   Promise
   .resolve (d3.select("#fsm_src").node().value)
   .then    ((src) => parser.parse(src))
-  .catch   ((err) => alert(err))
   .then    ((asa) => typecheck(asa)) // abstract syntax array
   .then    ((asa) => generate_dot(asa))
   .then    ((dot) => render_dot(engine, dot))
@@ -58,7 +57,7 @@ function generate_dot (nodes) {
     .reduce(concat, [])
     .map(edge => edge.source.string + " -> " + 
                  edge.target.string + 
-               ' [label="' + edge.symbol.string + '"]'))
+               ' [label=" ' + edge.symbol.string + ' "]'))
   .join("\n");
 
   return "digraph { \n" +
