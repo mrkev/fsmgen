@@ -52,7 +52,7 @@ defns
 
 definition
   = _n type:state_type? _ "state" _ id:identifier _ "=" _
-    edges:(edge)+ _n
+    edges:(edge)+ _ _n
   {
     var node = {
       id: id,
@@ -65,7 +65,7 @@ definition
     if (type !== null) node.type = type;
     return node;
   }
-  / _n type:state_type? _ "state" _ id:identifier _
+  / _n type:state_type? _ "state" _ id:identifier _ _n
   {
     var node = {
       id: id,

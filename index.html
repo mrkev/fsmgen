@@ -75,9 +75,14 @@
     }
     return -1;
   };
-
   Array.prototype.subsetOf = function(arr, comp) {
     return this.filter((x) => arr.find(x, comp) < 0).length === 0;
+  };
+  Array.prototype.intersect = function(arr, comp) {
+    return this.filter((x) => arr.find(x, comp) > -1);
+  };
+  Array.prototype.minus = function(arr, comp) {
+    return this.filter((x) => arr.find(x, comp) < 0);
   };
   Array.prototype.each = function(cb) {
     this.forEach(cb); return this;
@@ -88,7 +93,7 @@
 
 <button id="parse_button">Parse</button>
 <textarea name="fsm_src" id="fsm_src" cols="30" rows="10">
-initial state q_0
+initial state q_0 =
   | 0 -> q_0
   | 1 -> q_1
 

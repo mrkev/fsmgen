@@ -55,8 +55,9 @@ function typecheck (asa) {
   // so we good with just using defs below
 
   // 2. No undeclared states
-  if (!uses.subsetOf(defs, id_compare))
-    throw new TypeError({}, "Use of undeclared state found.")
+  let undef = uses.minus(defs, id_compare);
+  if (undef.length > 0)
+    throw new TypeError(undef[0].location, "Use of undeclared state " + undef[0].string + ".")
 
   // 3. Exactly 1 initial state
   if (init.length > 1)
