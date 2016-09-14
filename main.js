@@ -1,10 +1,19 @@
 "use strict";
 /* global console, d3, PEG, alert, typecheck, Viz, concat */
 
+
+let editor = CodeMirror.fromTextArea(document.getElementById("fsm_src"), {
+  lineWrapping: true,
+  lineNumbers: true,
+  styleActiveLine: true,
+});
+
 var parser = null;
 
+let pegfile = "https://raw.githubusercontent.com/mrkev/fsmgen/master/fsm_parser.pegjs"
+
 /** Generate parser */
-d3.text("fsm_parser.pegjs", function(err, diff) {
+d3.text(pegfile, function(err, diff) {
 
   if (err) return document.write("Error reading parser");
 
@@ -18,7 +27,7 @@ d3.select("#parse_button").on('click', () => {
   let engine = "dot";
 
   Promise
-  .resolve (d3.select("#fsm_src").node().value)
+  .resolve (editor.getValue())
   .then    ((src) => parser.parse(src))
   .then    ((asa) => typecheck(asa)) // abstract syntax array
   .then    ((asa) => generate_dot(asa))

@@ -15,6 +15,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pegjs/0.9.0/peg.min.js"></script>
     <script src="https://mdaines.github.io/viz.js/bower_components/viz.js/viz.js"></script>
     <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/is_js/0.8.0/is.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.18.2/codemirror.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.18.2/codemirror.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.18.2/addon/selection/active-line.js"></script>
+    <style type="text/css">.CodeMirror {line-height: 1.1em; width: 100%,; height: 100%;}</style>
+
     <style>
       svg { margin: 20px; }
       textarea { width: 100%; }
@@ -81,12 +88,14 @@ final state q2 =
 </textarea>
 <br><button id="parse_button">Render</button>
 
+<div id="code"></div>
+
 <div id="d3out"></div>
 <div id="svg-wrapper"></div>
 
-<select disabled="disabled">
-  <option value="svg">svg</option>
-  <option value="svg">svg</option>
+<select id="export_format">
+  <option value="svg" id="svg_export">svg</option>
+  <option value="svg" id="png_export">png</option>
 </select>
 
 <button id="download_button" disabled="disabled">Download</button>
@@ -97,13 +106,27 @@ final state q2 =
 
 </section>
 
-<!--******************************** FOOTER. ********************************-->
+<script type="text/javascript">
+  if (is.safari()) {
+    document.getElementById('fsm_src').innerHTML = "// Safari is not supported sorry.";
+    document.getElementById('download_button').disabled = true;
+    document.getElementById('export_format').disabled = true;
+    document.getElementById('parse_button').disabled = true;
+  }
 
+  var fmts = document.getElementById("export_format").options;
+  if (is.not.chrome()) {
+    fmts[1].disabled = true;
+    fmts[1].innerHTML = "png (Chrome only)";
+  }
+
+</script>
+
+<!--******************************** FOOTER. ********************************-->
 <footer>
   <p class="view"><a href="https://github.com/mrkev/fsmgen">View the Project on GitHub <small>mrkev/fsmgen</small></a></p>
   <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
 </footer>
-
     </div>
   </body>
 </html>
