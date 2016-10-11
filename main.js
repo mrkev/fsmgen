@@ -1,12 +1,15 @@
 "use strict";
 /* global console, d3, PEG, alert, typecheck, Viz, concat */
 
-
+// Setup editor
 let editor = CodeMirror.fromTextArea(document.getElementById("fsm_src"), {
   lineWrapping: true,
   lineNumbers: true,
   styleActiveLine: true,
 });
+
+// For error messages
+let errors = document.getElementById('errors');
 
 var parser = null;
 
@@ -21,10 +24,29 @@ d3.text(pegfile, function(err, diff) {
 
 });
 
+var errmrk = [];
+
+let notify_error = (err) => {
+  // -1 because it's coordinates are 1 instead of 0 indexed, for readability
+  let start = {line: err.location.start.line-1, ch: err.location.start.column-1}
+  let end   = {line: err.location.end.line-1,   ch: err.location.end.column-1}
+  errmrk.push(editor.markText(start, end, {className: "code_error"}));
+  errors.textContent = err.message;
+}
+
+let clear_errors = () => {
+  errmrk.forEach(marker => marker.clear())
+  errmrk = [];
+  errors.textContent = "";
+}
+
 
 d3.select("#parse_button").on('click', () => {
 
   let engine = "dot";
+
+  clear_errors();
+  // clear('downloads');
 
   Promise
   .resolve (editor.getValue())
@@ -33,8 +55,8 @@ d3.select("#parse_button").on('click', () => {
   .then    ((asa) => generate_dot(asa))
   .then    ((dot) => render_dot(engine, dot))
   .catch   ((err) => {
-    if (err instanceof TypeError) {
-      alert(err.message);
+    if (err instanceof TypeError || err.name === "SyntaxError") {
+      notify_error(err);
     }
     else {
       console.log(err.message);

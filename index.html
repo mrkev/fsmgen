@@ -17,6 +17,8 @@
     <script src="https://d3js.org/d3.v3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/is_js/0.8.0/is.js"></script>
 
+    <script src="http://danml.com/js/download2.js"></script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.18.2/codemirror.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.18.2/codemirror.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.18.2/addon/selection/active-line.js"></script>
@@ -25,6 +27,7 @@
     <style>
       svg { margin: 20px; }
       textarea { width: 100%; }
+      .code_error { background-color: #f93; }
     </style>
   </head>
   <body>
@@ -34,7 +37,7 @@
 
 <header>
   <h1>Fsmgen</h1>
-  <p>This site lets you design FSMs using a DSL. Here's how to use it;</p>
+  <p>Design FSMs using a DSL. Here's how;</p>
 
   <h3>Define a state:</h3>
 
@@ -53,7 +56,7 @@ state q1 =
 
         <pre>
 initial state q0 =
-  | stay -> q0
+  | _ -> q0
   | move -> q1
   | jump -> q2
 
@@ -70,6 +73,8 @@ final state q2 =
 <!--********************************* BODY. *********************************-->
 
 <section>
+
+<div id="saves"></div>
 
 <textarea name="fsm_src" id="fsm_src" rows="16">
 initial state q0 =
@@ -89,17 +94,11 @@ final state q2 =
 <br><button id="parse_button">Render</button>
 
 <div id="code"></div>
+<pre id="errors"></pre>
 
 <div id="d3out"></div>
 <div id="svg-wrapper"></div>
-
-<select id="export_format">
-  <option value="svg" id="svg_export">svg</option>
-  <option value="svg" id="png_export">png</option>
-</select>
-
-<button id="download_button" disabled="disabled">Download</button>
-<span class="small">: coming soon...</span>
+<div id="downloads"></div>
 <script src="util.js"></script>
 <script src="typecheck.js"></script>
 <script src="main.js"></script>
@@ -109,17 +108,8 @@ final state q2 =
 <script type="text/javascript">
   if (is.safari()) {
     document.getElementById('fsm_src').innerHTML = "// Safari is not supported sorry.";
-    document.getElementById('download_button').disabled = true;
-    document.getElementById('export_format').disabled = true;
     document.getElementById('parse_button').disabled = true;
   }
-
-  var fmts = document.getElementById("export_format").options;
-  if (is.not.chrome()) {
-    fmts[1].disabled = true;
-    fmts[1].innerHTML = "png (Chrome only)";
-  }
-
 </script>
 
 <!--******************************** FOOTER. ********************************-->
