@@ -104,7 +104,7 @@
       display: block;
     }
 
-    #saves { list-style-type: none; padding: 14px;}
+    #saves { list-style-type: none; padding: 0px 12px;}
     #saves li button, #saves li a { font-family: monospace; }
 
     </style>
@@ -139,28 +139,28 @@
       <h3>Connect the state to other states:</h3>
 
       <pre>
-    state q0
+state q0
 
-    state q1 =
-      | back -> q0</pre>
+state q1 =
+  | back -> q0</pre>
 
             <h3>Define an initial state, and some final states:</h3>
 
 
             <pre>
-    initial state q0 =
-      | _ -> q0
-      | move -> q1
-      | jump -> q2
+initial state q0 =
+  | _ -> q0
+  | move -> q1
+  | jump -> q2
 
-    state q1 =
-      | back -> q0
-      | stay -> q1
-      | move -> q2
+state q1 =
+  | back -> q0
+  | stay -> q1
+  | move -> q2
 
-    final state q2 =
-      | stay -> q2
-      | restart -> q0</pre>
+final state q2 =
+  | stay -> q2
+  | restart -> q0</pre>
 
     <p class="view"><a href="https://github.com/mrkev/fsmgen">View the Project on GitHub <small>mrkev/fsmgen</small></a></p>
     <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
@@ -194,14 +194,15 @@ final state q2 =
   | stay -> q2
   | restart -> q0
 </textarea>
-<br><button id="parse_button">Render</button>
+<br>
+<pre id="errors"></pre><button id="parse_button">Render</button>
+<span id="downloads"></span>
 
 <div id="code"></div>
-<pre id="errors"></pre>
+
 
 <div id="d3out"></div>
 <div id="svg-wrapper"></div>
-<div id="downloads"></div>
 <script src="util.js"></script>
 <script src="typecheck.js"></script>
 <script src="main.js"></script>

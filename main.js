@@ -64,7 +64,10 @@ function load_saves () {
     button.setAttribute("data-save", ls.getItem(ls.key(i)));
     button.innerHTML = ls.key(i);
     button.onclick = function (e) {
-      editor.setValue(e.target.getAttribute('data-save'))
+      editor.setValue(e.target.getAttribute('data-save'));
+      clear_errors();
+      clear('downloads');
+      clear('svg-wrapper');
     }
     li.insertBefore(button, li.firstChild)
     saves.appendChild(li);
