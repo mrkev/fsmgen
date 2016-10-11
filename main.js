@@ -1,27 +1,23 @@
 "use strict";
 /* global console, d3, PEG, alert, typecheck, Viz, concat */
 
-// Setup editor
+/** Setup editor */
 let editor = CodeMirror.fromTextArea(document.getElementById("fsm_src"), {
   lineWrapping: true,
   lineNumbers: true,
   styleActiveLine: true,
 });
 
-// For error messages
-let errors = document.getElementById('errors');
+let errors = document.getElementById('errors'); // For error messages
+let newsvg = document.getElementById("svg-wrapper"); // For putting the svg in
 
 var parser = null;
-
 let pegfile = "https://raw.githubusercontent.com/mrkev/fsmgen/master/fsm_parser.pegjs"
 
 /** Generate parser */
 d3.text(pegfile, function(err, diff) {
-
   if (err) return document.write("Error reading parser");
-
   parser = PEG.buildParser(diff);
-
 });
 
 var errmrk = [];
@@ -100,7 +96,6 @@ function generate_dot (nodes) {
 function render_dot (engine, dot) {
 
   let result = Viz(dot, { format:"svg", engine:engine });
-  var newsvg = document.getElementById("svg-wrapper");
 
   newsvg.innerHTML = result;
 
