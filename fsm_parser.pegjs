@@ -103,13 +103,13 @@ edge
   }
 
 identifier
-  = $0:[a-zA-Z0-9_$]+
+  = $0:[a-zA-Z0-9_\-\~\!\?\%\*\+\^\$\/\;\:\(\)]+
     { 
       return new Identifier(location(), $0.join(""));
     }
 
 symbol
-  = sym:[a-zA-Z0-9_$]+
+  = sym:[a-zA-Z0-9_\-\~\!\?\%\*\+\^\$\/\;\:\(\)]+
     { // _ will signify an empty string
       var str = sym.join("");
       return new Symbol(location(), str === '_' ? '' : str);
