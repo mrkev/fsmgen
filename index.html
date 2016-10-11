@@ -24,6 +24,92 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.18.2/addon/selection/active-line.js"></script>
     <style type="text/css">.CodeMirror {line-height: 1.1em; width: 100%,; height: 100%;}</style>
 
+    <!-- load MUI -->
+    <!-- <link href="//cdn.muicss.com/mui-0.9.1/css/mui.min.css" rel="stylesheet" type="text/css" /> -->
+    <style>
+    
+    /**
+     * MUI Tabs module
+     */
+    .mui-tabs__bar {
+      list-style: none;
+      padding-left: 0;
+      margin-bottom: 0;
+      background-color: transparent;
+      white-space: nowrap;
+      overflow-x: auto;
+      padding-bottom: 14px;
+    }
+
+    .mui-tabs__bar > li {
+      display: inline-block;
+      width:auto;
+      float:auto;
+      border-right:none;
+      height:auto;
+    }
+
+    .mui-tabs__bar > li > a {
+      display: block;
+      white-space: nowrap;
+      text-transform: uppercase;
+      font-weight: 500;
+      color: rgba(0, 0, 0, 0.87);
+      cursor: default;
+      height: 36px;
+      line-height: 40px;
+      padding-left: 12px;
+      padding-right: 12px;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    .mui-tabs__bar > li > a:hover {
+      text-decoration: none;
+    }
+
+    .mui-tabs__bar > li.mui--is-active {
+      border-bottom: 2px solid #2196F3;
+    }
+
+    .mui-tabs__bar > li.mui--is-active > a {
+      color: #2196F3;
+    }
+
+    .mui-tabs__bar.mui-tabs__bar--justified {
+      display: table;
+      width: 100%;
+      table-layout: fixed;
+    }
+
+    .mui-tabs__bar.mui-tabs__bar--justified > li {
+      display: table-cell;
+    }
+
+    .mui-tabs__bar.mui-tabs__bar--justified > li > a {
+      text-align: center;
+      padding-left: 0px;
+      padding-right: 0px;
+    }
+
+    .mui-tabs__pane {
+      display: none;
+      height: 100%;
+      overflow: scroll;
+    }
+
+    .mui-tabs__pane.mui--is-active {
+      display: block;
+    }
+
+    #saves { list-style-type: none; padding: 14px;}
+    #saves li button, #saves li a { font-family: monospace; }
+
+    </style>
+    <script src="//cdn.muicss.com/mui-0.9.1/js/mui.min.js"></script>
+
     <style>
       svg { margin: 20px; }
       textarea { width: 100%; }
@@ -36,45 +122,62 @@
 <!--******************************** HEADER. ********************************-->
 
 <header>
+
   <h1>Fsmgen</h1>
-  <p>Design FSMs using a DSL. Here's how;</p>
 
-  <h3>Define a state:</h3>
+  <ol class="mui-tabs__bar">
+    <li class="mui--is-active"><a data-mui-toggle="tab" data-mui-controls="pane-default-1">Quickstart</a></li>
+    <li><a data-mui-toggle="tab" data-mui-controls="pane-default-2">Saved</a></li>
+  </ol>
+  <div class="mui-tabs__pane mui--is-active" id="pane-default-1">
+      <p>Design FSMs using a DSL. Here's how;</p>
 
-  <pre>state q0</pre>
+      <h3>Define a state:</h3>
 
-  <h3>Connect the state to other states:</h3>
+      <pre>state q0</pre>
 
-  <pre>
-state q0
+      <h3>Connect the state to other states:</h3>
 
-state q1 =
-  | back -> q0</pre>
+      <pre>
+    state q0
 
-        <h3>Define an initial state, and some final states:</h3>
+    state q1 =
+      | back -> q0</pre>
+
+            <h3>Define an initial state, and some final states:</h3>
 
 
-        <pre>
-initial state q0 =
-  | _ -> q0
-  | move -> q1
-  | jump -> q2
+            <pre>
+    initial state q0 =
+      | _ -> q0
+      | move -> q1
+      | jump -> q2
 
-state q1 =
-  | back -> q0
-  | stay -> q1
-  | move -> q2
+    state q1 =
+      | back -> q0
+      | stay -> q1
+      | move -> q2
 
-final state q2 =
-  | stay -> q2
-  | restart -> q0</pre>
+    final state q2 =
+      | stay -> q2
+      | restart -> q0</pre>
+
+    <p class="view"><a href="https://github.com/mrkev/fsmgen">View the Project on GitHub <small>mrkev/fsmgen</small></a></p>
+    <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+
+  </div>
+  <div class="mui-tabs__pane" id="pane-default-2">
+    <ol id="saves"></ol>
+  </div>
+  <div class="mui-tabs__pane" id="pane-default-3">Pane-3</div>
+
+
+
 </header>
 
 <!--********************************* BODY. *********************************-->
 
 <section>
-
-<div id="saves"></div>
 
 <textarea name="fsm_src" id="fsm_src" rows="16">
 initial state q0 =
@@ -114,8 +217,7 @@ final state q2 =
 
 <!--******************************** FOOTER. ********************************-->
 <footer>
-  <p class="view"><a href="https://github.com/mrkev/fsmgen">View the Project on GitHub <small>mrkev/fsmgen</small></a></p>
-  <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+
 </footer>
     </div>
   </body>

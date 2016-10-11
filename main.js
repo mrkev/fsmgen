@@ -10,6 +10,7 @@ let editor = CodeMirror.fromTextArea(document.getElementById("fsm_src"), {
 
 let errors = document.getElementById('errors'); // For error messages
 let newsvg = document.getElementById("svg-wrapper"); // For putting the svg in
+let saves  = document.getElementById('saves');
 
 let clear = (id) => { /** Clears a node's children */
   let node = document.getElementById(id);
@@ -42,6 +43,57 @@ let clear_errors = () => {
   errors.textContent = "";
 }
 
+/** Saving */
+
+let ls = window.localStorage;
+
+function load_saves () {
+
+  // if (ls.length === 0) {
+  //   ls.setItem((new Date()).toISOString(), editor.getValue())
+  // }
+
+  // clear save buttons
+  saves.innerHTML = '';
+
+  // cerate old save buttons
+  for (var i = ls.length-1; i > -1; i--) {
+    var button = document.createElement('button');
+    var li = document.createElement('li');
+    li.innerHTML = ' [<a href="javascript:delete_save(' + "'" + ls.key(i) + "'" + ')">x</a>]';
+    button.setAttribute("data-save", ls.getItem(ls.key(i)));
+    button.innerHTML = ls.key(i);
+    button.onclick = function (e) {
+      editor.setValue(e.target.getAttribute('data-save'))
+    }
+    li.insertBefore(button, li.firstChild)
+    saves.appendChild(li);
+  }
+
+  // create new save button
+  let li_new     = document.createElement('li');
+  let button_new = document.createElement('button');
+  button_new.innerHTML = 'save as...';
+  button_new.onclick = function () {
+    var name = prompt("Save as:", new Date().toISOString());
+    if (name == null) return;
+    ls.setItem(name, editor.getValue());
+    load_saves();
+  }
+  li_new.appendChild(button_new)
+  saves.insertBefore(li_new, saves.firstChild)
+
+}
+
+function delete_save (key) {
+  ls.removeItem(key);
+  load_saves();
+}
+
+load_saves();
+
+
+/** Main */
 
 d3.select("#parse_button").on('click', () => {
 
