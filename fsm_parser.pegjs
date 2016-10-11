@@ -93,7 +93,7 @@ _n "newlines"
   = [\n]*
 
 edge
-  = ("|" _ sym:(symbol) _ "->" _ id:identifier _)
+  = ("|" _ sym:symbol _ "->" _ id:identifier _)
   {
     if (!sym) sym = "";
     return {
@@ -103,27 +103,17 @@ edge
   }
 
 identifier
-  = $0:[a-zA-Z_0-9$]+
-    { // Each regex group is returned as a separate string
-      // in an array; join them all.
+  = $0:[a-zA-Z0-9_$]+
+    { 
       return new Identifier(location(), $0.join(""));
     }
 
-string
-  = \".\"
-
-/*
-identifier
-  = $0:[a-zA-Z_$]+ $1:[a-zA-Z0-9_$]*
-    { // Each regex group is returned as a separate string
-      // in an array; join them all.
-      return new Identifier(location(), $0.join("") + $1.join(""));
-    }
-*/
-
 symbol
   = sym:[a-zA-Z0-9_$]+
-    { return new Symbol(location(), sym.join("")); }
+    { // _ will signify an empty string
+      var str = sym.join("");
+      return new Symbol(location(), str === '_' ? '' : str);
+    }
 
 /*
  sym:([a-zA-Z0-9_$]+ / \".*\" / \'.*\')

@@ -17,7 +17,8 @@ let clear = (id) => { /** Clears a node's children */
 }
 
 var parser = null;
-let pegfile = "https://raw.githubusercontent.com/mrkev/fsmgen/master/fsm_parser.pegjs"
+// let pegfile = "https://raw.githubusercontent.com/mrkev/fsmgen/master/fsm_parser.pegjs"
+let pegfile = "fsm_parser.pegjs"
 
 /** Generate parser */
 d3.text(pegfile, function(err, diff) {
