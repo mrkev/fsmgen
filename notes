@@ -1,0 +1,56 @@
+
+  /*
+[
+   {
+      "id": "q_0",
+      "edges": [
+         {
+            "symbol": "0",
+            "target": "q_0",
+            "source": "q_0"
+         },
+         {
+            "symbol": "1",
+            "target": "q_1",
+            "source": "q_0"
+         }
+      ],
+      "type": "initial"
+   },
+   {
+      "id": "q_0",
+      "edges": [
+         {
+            "symbol": "0",
+            "target": "q_0",
+            "source": "q_0"
+         },
+         {
+            "symbol": "1",
+            "target": "q_1",
+            "source": "q_0"
+         }
+      ]
+   }
+]
+
+
+digraph {
+    START
+    offline
+    scanning
+    joining
+    online [peripheries=2]
+ 
+    START -> offline
+    offline -> scanning [label="scan"]
+    offline -> offline [label="failed scan"]
+    scanning -> joining [label="detected"]
+    scanning -> offline [label="failed join"]
+    joining -> online [label="handshake"]
+    joining -> offline [label="failed handshake"]
+    online -> offline [label="timeout"]
+}
+
+  */
+  
