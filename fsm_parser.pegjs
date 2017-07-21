@@ -99,11 +99,19 @@ _n "newlines"
   = [\n]*
 
 edge
-  = ("|" _ sym:symbol _ "->" _ id:identifier _)
+  = "|" _ sym:symbol _ "->" _ id:identifier _
   {
     if (!sym) sym = "";
     return {
       symbol : sym,
+      target : id
+    }
+  }
+  / "|" _ str:StringLiteral _ "->" _ id:identifier _
+  {
+    if (!str) str = "";
+    return {
+      symbol : new Symbol(location(), str),
       target : id
     }
   }
@@ -121,6 +129,28 @@ symbol
       return new Symbol(location(), str === '_' ? '' : str);
     }
 
+StringLiteral
+  = '"' chars:DoubleStringCharacter* '"' { return chars.join(''); }
+  / "'" chars:SingleStringCharacter* "'" { return chars.join(''); }
+
+DoubleStringCharacter
+  = !('"' / "\\") char:. { return char; }
+  / "\\" sequence:EscapeSequence { return sequence; }
+
+SingleStringCharacter
+  = !("'" / "\\") char:. { return char; }
+  / "\\" sequence:EscapeSequence { return sequence; }
+
+EscapeSequence
+  = "'"
+  / '"'
+  / "\\"
+  / "b"  { return "\b";   }
+  / "f"  { return "\f";   }
+  / "n"  { return "\n";   }
+  / "r"  { return "\r";   }
+  / "t"  { return "\t";   }
+  / "v"  { return "\x0B"; }
 /*
  sym:([a-zA-Z0-9_$]+ / \".*\" / \'.*\')
  */
