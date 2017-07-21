@@ -45,9 +45,9 @@ function typecheck (asa) {
   .dedup(id_compare)
 
   let init = asa.filter
-    ((decl) => decl.type === "initial")
+    ((decl) => decl.type.includes("initial"))
 
-  // 1. No duplicate definitions
+  // 1. No duplicate deinitions
   let dupes = defs.repeats(id_compare);
   if (dupes.length > 0)
     throw new TypeError(dupes[0].location, "Duplicate state definition for " + dupes[0].string + " found.");

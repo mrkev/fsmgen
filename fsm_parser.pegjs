@@ -51,7 +51,7 @@ defns
   = definition+
 
 definition
-  = _n type:state_type? _ "state" _ id:identifier _ "=" _
+  = _n type:state_types? _ "state" _ id:identifier _ "=" _
     edges:(edge)+ _ _n
   {
     var node = {
@@ -59,22 +59,24 @@ definition
       edges: edges.map(function (e) {
         e.source = id;
         return e;
-      })
+      }),
+      type:[],
     }
 
     if (type !== null) node.type = type;
     return node;
   }
-  / _n type:state_type? _ "state" _ id:identifier _ _n
+  / _n type:state_types? _ "state" _ id:identifier _ _n
   {
     var node = {
       id: id,
-      edges: []
+      edges: [],
+      type: [],
     }
     if (type !== null) node.type = type;
     return node;
   }
-  / _n "hell" _ "state" _ _n
+/*  / _n "hell" _ "state" _ _n
   {
     return {
       id    : "Hell",
@@ -82,9 +84,13 @@ definition
       type  : "hell"
     }
   }
+*/
 
-state_type
-  = "initial" / "final"
+state_types
+  = t1:"initial" _ t2:"final"   { return [t1, t2] }
+  / t1:"final"   _ t2:"initial" { return [t1, t2] }
+  / t1:"initial" { return [t1]}
+  / t1:"final"   { return [t1]}
 
 _ "whitespace"
   = [ \t\n\r]*

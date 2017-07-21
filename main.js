@@ -127,14 +127,14 @@ d3.select("#parse_button").on('click', () => {
 function generate_dot (nodes) {
 
   let init = nodes.filter
-    ((node) => node.type === "initial");
+    ((node) => node.type.includes("initial"));
 
   let node_defs = []
   .concat(init
     .map(node => "__start__" + node.id.string + " [style=invis,fixedsize=true,height=0,width=0]"))
   .concat(nodes
     .map(node => node.id.string + (
-        (node.type === "final") ? " [peripheries=2]" : "")))
+        (node.type.includes("final")) ? " [peripheries=2]" : "")))
   .join("\n");
 
   let edge_defs = []
