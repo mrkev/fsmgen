@@ -51,7 +51,7 @@ defns
   = definition+
 
 definition
-  = _n type:state_types? _ "state" _ id:identifier _ "=" _
+  = _n type:state_types? _ "state" _ alias:alias? _ id:identifier _ "=" _
     edges:(edge)+ _ _n
   {
     var node = {
@@ -64,9 +64,10 @@ definition
     }
 
     if (type !== null) node.type = type;
+    if (alias !== null) node.alias = alias;
     return node;
   }
-  / _n type:state_types? _ "state" _ id:identifier _ _n
+  / _n type:state_types? _ "state" _ alias:alias? _ id:identifier _ _n
   {
     var node = {
       id: id,
@@ -74,6 +75,7 @@ definition
       type: [],
     }
     if (type !== null) node.type = type;
+    if (alias !== null) node.alias = alias;
     return node;
   }
 /*  / _n "hell" _ "state" _ _n
@@ -85,6 +87,9 @@ definition
     }
   }
 */
+
+alias
+  = str:StringLiteral _ "as" { return {string:str} }
 
 state_types
   = t1:"initial" _ t2:"final"   { return [t1, t2] }

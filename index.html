@@ -185,7 +185,7 @@ initial state q0 =
   | move -> q1
   | jump -> q2
 
-state q1 =
+state "middle state" as q1 =
   | back -> q0
   | stay -> q1
   | move -> q2

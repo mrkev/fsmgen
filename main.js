@@ -135,6 +135,9 @@ function generate_dot (nodes) {
   .concat(nodes
     .map(node => node.id.string + (
         (node.type.includes("final")) ? " [peripheries=2]" : "")))
+  .concat(nodes
+    .filter(node => node.alias)
+    .map(node => `${node.id.string} [label="${node.alias.string}"]`))
   .join("\n");
 
   const edge_defs = []
@@ -148,6 +151,8 @@ function generate_dot (nodes) {
                ' [label=" ' + edge.symbol.string + ' "]'))
   .join("\n");
 
+  console.log(node_defs)
+
   return "digraph { \n" +
     node_defs + "\n" +
     edge_defs + "\n" +
@@ -156,7 +161,7 @@ function generate_dot (nodes) {
 
 function render_dot (engine, dot) {
 
-  const result = Viz(dot, { format:"svg", engine:engine });
+  let result = Viz(dot, { format:"svg", engine:engine });
   newsvg.innerHTML = result;
 
   var svgdl = document.createElement('button');
@@ -165,9 +170,9 @@ function render_dot (engine, dot) {
     download('data:image/svg+xml;utf8,'+unescape(result), 'fsm.svg', 'image/svg')
   }
   
-  const pngdl = document.createElement('button');
+  let pngdl = document.createElement('button');
   pngdl.innerHTML = "download png";
-  const pngimg = Viz(dot, { format: "png-image-element", engine:engine });
+  let pngimg = Viz(dot, { format: "png-image-element", engine:engine });
   pngimg.setAttribute('id', 'pngimg');
   pngimg.setAttribute('hidden', 'hidden');
   downloads.appendChild(pngimg);
