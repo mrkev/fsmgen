@@ -31,7 +31,7 @@ Array.prototype.sum = function () {
   return this.reduce(function (acc, x) { return acc + x; }, 0);
 };
 
-let concat = (a, b) => a.concat(b);
+const concat = (a, b) => a.concat(b);
 Array.prototype.dedup = function (comp) {
   return this.filter((x, i) => this.find(x, comp) === i);
 };

@@ -32,23 +32,23 @@ class TypeError extends ExtendableError {
 
 function typecheck (asa) {
 
-  let id_compare = (a, b) => a.string === b.string
+  const id_compare = (a, b) => a.string === b.string
 
-  let defs = asa.map
+  const defs = asa.map
     ((decl) => decl.id)
 
-  let uses = asa.map
+  const uses = asa.map
     ((decl) => decl.edges.map
       ((e) => [e.source, e.target]))
     .reduce(concat, [])
   .reduce(concat, [])
   .dedup(id_compare)
 
-  let init = asa.filter
+  const init = asa.filter
     ((decl) => decl.type.includes("initial"))
 
   // 1. No duplicate deinitions
-  let dupes = defs.repeats(id_compare);
+  const dupes = defs.repeats(id_compare);
   if (dupes.length > 0)
     throw new TypeError(dupes[0].location, "Duplicate state definition for " + dupes[0].string + " found.");
 
@@ -56,7 +56,7 @@ function typecheck (asa) {
   // so we good with just using defs below
 
   // 2. No undeclared states
-  let undef = uses.minus(defs, id_compare);
+  const undef = uses.minus(defs, id_compare);
   if (undef.length > 0)
     throw new TypeError(undef[0].location, "Use of undeclared state " + undef[0].string + ".")
 
