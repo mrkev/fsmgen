@@ -157,7 +157,7 @@ function generate_dot (nodes) {
 
 function render_dot (engine, dot) {
 
-  const result = Viz(dot, { format:"svg", engine:engine });
+  const result = Viz(dot, { format:"svg", engine });
   newsvg.innerHTML = result;
 
   const svgdl = document.createElement('button');
@@ -168,12 +168,15 @@ function render_dot (engine, dot) {
   
   const pngdl = document.createElement('button');
   pngdl.innerHTML = "download png";
-  const pngimg = Viz(dot, { format: "png-image-element", engine:engine });
+  const pngimg = Viz(dot, { format: "png-image-element", engine });
   pngimg.setAttribute('id', 'pngimg');
   pngimg.setAttribute('hidden', 'hidden');
-  downloads.appendChild(pngimg);
+  downloads.appendChild(pngdl);
   pngdl.onclick = function () {
-    download(document.getElementById('pngimg').getAttribute('src'), "fsm.png", "image/png");
+    Viz.svgXmlToPngBase64(result, 2, (err, data) => {
+      if (err) return alert(err)
+      download('data:image/png;base64,'+data, 'fsm.png', 'image/png')
+    })
   }
 
   if (is.not.chrome()) {
