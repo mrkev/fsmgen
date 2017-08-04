@@ -9,7 +9,7 @@ const editor = CodeMirror.fromTextArea(document.getElementById("fsm_src"), {
 });
 
 const errors = document.getElementById('errors'); // For error messages
-const newsvg = document.getElementById("svg-wrapper"); // For putting the svg in
+const newsvg = document.getElementById('svg-wrapper'); // For putting the svg in
 const saves  = document.getElementById('saves');
 
 const clear = (id) => { /** Clears a node's children */
@@ -18,7 +18,6 @@ const clear = (id) => { /** Clears a node's children */
 }
 
 var parser = null;
-// let pegfile = "https://raw.githubusercontent.com/mrkev/fsmgen/master/fsm_parser.pegjs"
 const pegfile = "fsm_parser.pegjs"
 
 /** Generate parser */
@@ -27,7 +26,7 @@ d3.text(pegfile, function(err, diff) {
   parser = PEG.buildParser(diff);
 });
 
-var errmrk = [];
+let errmrk = [];
 
 const notify_error = (err) => {
   // -1 because it's coordinates are 1 instead of 0 indexed, for readability
@@ -131,10 +130,10 @@ function generate_dot (nodes) {
 
   const node_defs = []
   .concat(init
-    .map(node => "__start__" + node.id.string + " [style=invis,fixedsize=true,height=0,width=0]"))
+    .map(node => `__start__${node.id.string} [style=invis,fixedsize=true,height=0,width=0]`))
   .concat(nodes
-    .map(node => node.id.string + (
-        (node.type.includes("final")) ? " [peripheries=2]" : "")))
+    .filter(node => node.type.includes("final"))
+    .map(node => `${node.id.string} [peripheries=2]`))
   .concat(nodes
     .filter(node => node.alias)
     .map(node => `${node.id.string} [label="${node.alias.string}"]`))
@@ -142,16 +141,13 @@ function generate_dot (nodes) {
 
   const edge_defs = []
   .concat(init
-    .map((node) => "__start__" + node.id.string + " -> " + node.id.string))
+    .map((node) => `__start__${node.id.string} -> ${node.id.string}`))
   .concat(nodes
     .map(node => node.edges)
     .reduce(concat, [])
-    .map(edge => edge.source.string + " -> " + 
-                 edge.target.string + 
-               ' [label=" ' + edge.symbol.string + ' "]'))
+    .map(edge => `${edge.source.string} -> ${edge.target.string}` + 
+                 ` [label="${edge.symbol.string}"]`))
   .join("\n");
-
-  console.log(node_defs)
 
   return "digraph { \n" +
     node_defs + "\n" +
@@ -161,18 +157,18 @@ function generate_dot (nodes) {
 
 function render_dot (engine, dot) {
 
-  let result = Viz(dot, { format:"svg", engine:engine });
+  const result = Viz(dot, { format:"svg", engine:engine });
   newsvg.innerHTML = result;
 
-  var svgdl = document.createElement('button');
+  const svgdl = document.createElement('button');
   svgdl.innerHTML = "download svg";
   svgdl.onclick = function () {
     download('data:image/svg+xml;utf8,'+unescape(result), 'fsm.svg', 'image/svg')
   }
   
-  let pngdl = document.createElement('button');
+  const pngdl = document.createElement('button');
   pngdl.innerHTML = "download png";
-  let pngimg = Viz(dot, { format: "png-image-element", engine:engine });
+  const pngimg = Viz(dot, { format: "png-image-element", engine:engine });
   pngimg.setAttribute('id', 'pngimg');
   pngimg.setAttribute('hidden', 'hidden');
   downloads.appendChild(pngimg);
