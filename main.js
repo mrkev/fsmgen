@@ -168,10 +168,6 @@ function render_dot (engine, dot) {
   
   const pngdl = document.createElement('button');
   pngdl.innerHTML = "download png";
-  const pngimg = Viz(dot, { format: "png-image-element", engine });
-  pngimg.setAttribute('id', 'pngimg');
-  pngimg.setAttribute('hidden', 'hidden');
-  downloads.appendChild(pngdl);
   pngdl.onclick = function () {
     Viz.svgXmlToPngBase64(result, 2, (err, data) => {
       if (err) return alert(err)
@@ -187,7 +183,6 @@ function render_dot (engine, dot) {
   }
 
   downloads.appendChild(svgdl);
-  // png res is very low, let's acutally not allow png download
-  // downloads.appendChild(pngdl);
+  downloads.appendChild(pngdl);
 
 }
