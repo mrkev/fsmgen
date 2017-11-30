@@ -175,10 +175,8 @@ function render_dot (engine, dot) {
     })
   }
 
-  if (is.not.chrome()) {
-    pngdl.innerHTML = 'download png (chrome only)';
-    pngdl.setAttribute('disabled', 'disabled');
-    svgdl.innerHTML = "download svg (chrome only)";
+  if (is.firefox()) {
+    svgdl.innerHTML = "download svg (not supported in firefox)";
     svgdl.setAttribute('disabled', 'disabled');
   }
 
